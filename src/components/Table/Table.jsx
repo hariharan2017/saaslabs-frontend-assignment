@@ -1,7 +1,7 @@
 import { useEffect, useState, useMemo } from "react";
 import styles from "./Table.module.css";
 
-const pageSizeOptions = [5, 10, 25];
+const pageSizeOptions = [5, 10, 15];
 const PER_PAGE = 5;
 
 export const Table = ({ data = [], columns = [], title, paginate }) => {
@@ -29,26 +29,29 @@ export const Table = ({ data = [], columns = [], title, paginate }) => {
           <thead>
             <tr>
               {columns.map((col) => {
-                return <th key={col?.id}>{col?.label}</th>;
+                return (
+                  <th key={col?.id} className={styles["table-header"]}>
+                    {col?.label}
+                  </th>
+                );
               })}
             </tr>
-            <div className={styles["table-spacer"]} />
           </thead>
           <tbody>
             {paginatedData?.map((rowData) => {
               return (
-                <>
-                  <tr>
-                    {columns?.map((col, idx) => {
-                      return (
-                        <td className={styles["table-data-item"]}>
-                          {rowData?.[col?.accessor]}
-                        </td>
-                      );
-                    })}
-                  </tr>
-                  <div className={styles["table-spacer"]} />
-                </>
+                <tr key={rowData?.id}>
+                  {columns?.map((col) => {
+                    return (
+                      <td
+                        key={`${rowData?.id}-${rowData?.[col?.accessor]}`}
+                        className={styles["table-data-item"]}
+                      >
+                        {rowData?.[col?.accessor]}
+                      </td>
+                    );
+                  })}
+                </tr>
               );
             })}
           </tbody>
@@ -56,11 +59,16 @@ export const Table = ({ data = [], columns = [], title, paginate }) => {
         {paginate && totalPages > 1 && (
           <div className={styles["table-footer"]}>
             <div>
-              <span style={{ paddingRight: '0.5rem' }}>Items per page</span>
-              <select value={perPage} onChange={(e) => setPerPage(Number(e.target.value))}>
+              <span className={styles["pagesize-label"]}>Items per page</span>
+              <select
+                value={perPage}
+                onChange={(e) => setPerPage(Number(e.target.value))}
+              >
                 {pageSizeOptions.map((sizeOption) => {
                   return (
-                    <option key={"size " + sizeOption} value={sizeOption}>{sizeOption}</option>
+                    <option key={"size " + sizeOption} value={sizeOption}>
+                      {sizeOption}
+                    </option>
                   );
                 })}
               </select>

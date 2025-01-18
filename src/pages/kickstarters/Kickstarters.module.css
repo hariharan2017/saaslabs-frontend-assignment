@@ -3,4 +3,12 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-bottom: 3rem
+}
+
+.loading-container, .error-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
 }
